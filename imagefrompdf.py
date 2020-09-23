@@ -34,6 +34,9 @@ class ImageSelect(tk.Frame):
         #------------------TIME--------------
         localtime=time.asctime(time.localtime(time.time()))
 
+        #------------------PATH--------------
+        pathReal = "D:/.../Extracted_Images"
+
         #-----------------INFO TOP------------
         self.lblinfo = tk.Label(font=( 'aria' ,30, 'bold' ),text="Extract image(s) from your pdf",fg="steel blue",bd=10,anchor='w')
         self.lblinfo.grid(row=1, column=0, columnspan=5)
@@ -52,13 +55,13 @@ class ImageSelect(tk.Frame):
         self.successMsg.grid(row=3, column=4, columnspan=2, pady = 50)
         self.successMsg.grid_remove()
         
-        self.direcName = tk.Label(font=( 'times' ,12, ),text="Images store: C:/Users/.../Documents/KETRIKA/HUCPYTHON/Extracted_Images",fg="black",anchor='w')
+        self.direcName = tk.Label(font=( 'times' ,12, ),text="Images store: " + pathReal,fg="black",anchor='w')
         self.direcName.grid(row=4, column=0, columnspan=5, pady = 5)
     
     def UploadAction(self, event=None):
-        filename = filedialog.askopenfilename(initialdir = "/Users/ralimanana/Documents/KETRIKA/",title = "Select file",filetypes = (("pdf files","*.pdf"),("pdf files","*.pdf*")))
+        filename = filedialog.askopenfilename(initialdir = "/.../KETRIKA/",title = "Select file",filetypes = (("pdf files","*.pdf"),("pdf files","*.pdf*")))
         
-        imgdir = r"C:\Users\ralimanana\Documents\KETRIKA\HUCPYTHON\Extracted_Images"  # where the pics are
+        imgdir = r"D:/.../Extracted_Images/"  # where the pics are
         imglist = os.listdir(imgdir)  # list of them
         for f in imglist:
             os.remove(os.path.join(imgdir, f))
@@ -79,25 +82,24 @@ class ImageSelect(tk.Frame):
                 xref = img[0]
                 pix = fitz.Pixmap(doc, xref)
                 if pix.n < 5:       # this is GRAY or RGB
-                    pix.writePNG(r"C:\Users\...\Documents\KETRIKA\HUCPYTHON\Extracted_Images\p%s-%s.png" % (i, xref))
+                    pix.writePNG(imgdir + "p%s-%s.png" % (i, xref))
                     pix = None 
                 else:               # CMYK: convert to RGB first
                     pix1 = fitz.Pixmap(fitz.csRGB, pix)
-                    pix1.writePNG(r"C:\Users\...\Documents\KETRIKA\HUCPYTHON\Extracted_Images\p%s-%s.png" % (i, xref))
+                    pix1.writePNG(imgdir + "p%s-%s.png" % (i, xref))
                     pix1 = None 
                 nbimage = nbimage + 1
                 
         self.successMsg.configure(font=( 'times' ,12, 'bold'), text = str(nbimage) + " Images extracted", fg = "green")     
         self.successMsg.grid()   
 
-        imgdir = r"C:\Users\...\Documents\KETRIKA\HUCPYTHON\Extracted_Images"  # where the pics are
         imglist = os.listdir(imgdir)  # list of them
         #imgcount = len(imglist)  # pic count
 
         rownumber = 5
         i = 1
         for a, f in enumerate(imglist):
-            image = Image.open(r"C:/Users/.../Documents/KETRIKA/HUCPYTHON/Extracted_Images/" + f)
+            image = Image.open(imgdir + f)
             image = image.resize((100, 100), Image.ANTIALIAS)
             image = ImageTk.PhotoImage(image)
             image1 = tk.Label(image=image)
