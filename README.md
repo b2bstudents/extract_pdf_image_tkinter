@@ -4,4 +4,5 @@ This code extract all supported images files in your uploaded pdf. The applicati
 # change the path to add the real path
 Give the real path where you want to extract images
 
-# cha
+# requirements
+Please install fitz and tkinter modules 
